@@ -22,7 +22,7 @@ def preprocess(df,region_df):
 
 data=preprocess(df,region_df)
 
-
+st.sidebar.title("Olympics Analysis")
 
 user_menu=st.sidebar.radio(
     'Select an option',
@@ -38,10 +38,27 @@ user_menu=st.sidebar.radio(
 df=pd.read_csv('athlete_events.csv')
 
 if user_menu=='Medal Tally':
-    medals=helper.medal_tally(df)
-    st.dataframe(medals)
-else:
-    st.dataframe(data)
+    st.sidebar.header("Medal Tally")
+    years,countries=helper.country_year_list()
+    selected_year=st.sidebar.selectbox("Select Year",years)
+    selected_country=st.sidebar.selectbox("Select Country",countries)
+    
+    if selected_year=='Overall' and selected_country=='Overall':
+        st.title('Overall Tally')
+    
+    if selected_year!='Overall' and selected_country=='Overall':
+        st.title('Medal Tally in '+str(selected_year)+' Olympics')
+    
+    if selected_year=='Overall' and selected_country!='Overall':
+        st.title(selected_country + ' Overall Performance ')
+        
+    if selected_year!='Overall' and selected_country!='Overall':
+        st.title(selected_country + ' Performance '+'in '+str(selected_year)+" Olympics")
+    
+    
+    
+    medals=helper.medal_tally(selected_year,selected_country)
+    st.table(medals)
 
 
 
