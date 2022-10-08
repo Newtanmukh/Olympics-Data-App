@@ -64,6 +64,33 @@ def country_year_list():
     country.insert(0,'Overall')
     
     return years,country
+
+
+def yearwise_medal_tally(country):
+    df=pd.read_csv('athlete_events.csv')
+    region_df=pd.read_csv('noc_regions.csv')
+    df = df[df['Season'] == 'Summer']
+    # merge with region_df
+    df = df.merge(region_df, on='NOC', how='left')
+    # dropping duplicates
+    df.drop_duplicates(inplace=True)
+    # one hot encoding medals
+    df = pd.concat([df, pd.get_dummies(df['Medal'])], axis=1)
     
+    temp_df=df.dropna(subset=['Medal'])
+    df=df.drop_duplicates(subset=['Team','NOC','Games','Season','Year','City','Sport','Event','Medal'])
+    country=str(country)
+    df=df[df['region']==country]
+    df=df.groupby('Year').count()['Medal'].reset_index()
+
+    return df
+
+
+
+
+
+
+
+
     
     

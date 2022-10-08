@@ -1,0 +1,3 @@
+Type the command :
+
+streamlit run app.py
