@@ -1,16 +1,14 @@
 import streamlit as st
 import pandas as pd
-
-st.sidebar.radio(
-    'Select an option',
-    ('Medal Tally','Overall Analysis','Country-wise Analysis','Athlete wise analysis')
-    )
-
+import helper
+ 
 df=pd.read_csv('athlete_events.csv')
 region_df=pd.read_csv('noc_regions.csv')
 
 
+
 def preprocess(df,region_df):
+        
     # filtering for summer olympics
     df = df[df['Season'] == 'Summer']
     # merge with region_df
@@ -24,4 +22,31 @@ def preprocess(df,region_df):
 
 data=preprocess(df,region_df)
 
-st.dataframe(data)
+
+
+user_menu=st.sidebar.radio(
+    'Select an option',
+    ('Medal Tally','Overall Analysis','Country-wise Analysis','Athlete wise analysis')
+    )
+
+
+
+
+
+
+
+df=pd.read_csv('athlete_events.csv')
+
+if user_menu=='Medal Tally':
+    medals=helper.medal_tally(df)
+    st.dataframe(medals)
+else:
+    st.dataframe(data)
+
+
+
+
+
+
+
+
